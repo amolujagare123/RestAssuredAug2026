@@ -4,9 +4,8 @@ import io.restassured.RestAssured;
 import io.restassured.path.json.JsonPath;
 
 import static io.restassured.RestAssured.given;
-import static org.hamcrest.Matchers.equalTo;
 
-public class ShuffleCards {
+public class ShuffleCards2 {
 
     public static void main(String[] args) {
 
@@ -20,18 +19,15 @@ public class ShuffleCards {
 
 
         System.out.println("respStr="+respStr);
-
         JsonPath jsonPath = new JsonPath(respStr);
-
-        boolean success = jsonPath.get("success");
-        int remaining = jsonPath.get("remaining");
         String deckID = jsonPath.get("deck_id");
-        boolean shuffled = jsonPath.get("shuffled");
-
-        System.out.println("success="+success);
-        System.out.println("remaining="+remaining);
         System.out.println("deckID="+deckID);
-        System.out.println("shuffled="+shuffled);
+
+        given().log().all()
+                .queryParam("count","2")
+                .when().get("/api/deck/"+deckID+"/draw/")
+                .then().log().all().statusCode(200);
+
 
     }
 
